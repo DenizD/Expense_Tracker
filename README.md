@@ -8,7 +8,7 @@ Here is a screenshot from the app:
 
 
 
-<img src="screenshots/expense_tracker_screenshot.jpg"  />
+<img src="screenshots/expense_tracker_screenshot.jpg" width="300" >
 
 ### Required Softwares
 
