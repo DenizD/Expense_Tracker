@@ -12,7 +12,7 @@ class DataStorage {
     prefs.setString(key, data);
   }
 
-  dynamic loadData(key) {
+  dynamic loadData(String key) {
     if (prefs.containsKey(key)) {
       String data = prefs.getString(key);
       dynamic jsonData = json.decode(data);
@@ -20,5 +20,11 @@ class DataStorage {
       return jsonData;
     }
     return null;
+  }
+
+  void deleteData(String key) {
+    if (prefs.containsKey(key)) {
+      prefs.remove(key);
+    }
   }
 }

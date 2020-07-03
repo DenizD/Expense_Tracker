@@ -9,7 +9,7 @@ class Constants {
   static final String expenseDateKey = 'expenseDate';
   static final String expenseDateListKey = 'expenseDateList';
 
-  static final List<String> categories = [
+  static final List<String> categoryList = [
     'Home',
     'Car',
     'Shopping',
@@ -18,7 +18,16 @@ class Constants {
     'Other',
   ];
 
-  static final List<IconData> icons = [
+  static final List<Color> categoryColorList = [
+    Colors.brown,
+    Colors.red,
+    Colors.orange,
+    Colors.green,
+    Colors.blue,
+    Colors.purple
+  ];
+
+  static final List<IconData> categoryIconList = [
     Icons.home,
     Icons.directions_car,
     Icons.shopping_cart,
@@ -27,6 +36,9 @@ class Constants {
     Icons.toys,
   ];
 
-  static final Map<String, IconData> categoryIcons =
-      Map.fromIterables(categories, icons);
+  static final Map<String, IconData> categoryIconMap =
+      Map.fromIterables(categoryList, categoryIconList);
+
+  static final Map<String, Color> categoryColorMap =
+      Map.fromIterables(categoryList, categoryColorList);
 }

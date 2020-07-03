@@ -18,4 +18,8 @@ class ExpenseItemList {
 
     _expenseItemList = _expenseItemMap.values.toList();
   }
+
+  void sortExpenseItems() {
+    _expenseItemList.sort((a, b) => b.getValue().compareTo(a.getValue()));
+  }
 }
