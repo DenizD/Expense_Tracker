@@ -1,24 +1,29 @@
-import 'dart:math';
-
 import 'package:expensetracker/components/data_column_component.dart';
 import 'package:expensetracker/components/data_row_component.dart';
 import 'package:expensetracker/components/rounded_button_component.dart';
+import 'package:expensetracker/components/side_navbar_component.dart';
 import 'package:expensetracker/models/expense_date.dart';
 import 'package:expensetracker/models/expense_date_list.dart';
 import 'package:expensetracker/models/expense_item.dart';
 import 'package:expensetracker/models/expense_item_list.dart';
 import 'package:expensetracker/services/data_storage_service.dart';
 import 'package:expensetracker/utils/constants.dart';
+import 'package:expensetracker/utils/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:after_init/after_init.dart';
+import 'dart:convert';
 
 class ExpenseScreen extends StatefulWidget {
+  static const String id = "expense_screen";
+
   @override
   _ExpenseScreenState createState() => _ExpenseScreenState();
 }
 
-class _ExpenseScreenState extends State<ExpenseScreen> {
+class _ExpenseScreenState extends State<ExpenseScreen>
+    with AfterInitMixin<ExpenseScreen> {
   TextEditingController textController = TextEditingController();
 
   String expenseCategory;
@@ -30,16 +35,21 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   ExpenseDateList expenseDateList = ExpenseDateList();
   ExpenseItemList expenseItemList = ExpenseItemList();
 
-  DataStorage dataStorage = DataStorage();
+  void _loadSettingsData() {
+    Settings.currency =
+        DataStorage.loadData(Constants.currencyStorageKey) ?? '';
+    Settings.language =
+        DataStorage.loadData(Constants.languageStorageKey) ?? '';
+  }
 
-  Future<void> _loadExpenseData() async {
-    await dataStorage.init();
-
-    dynamic savedData = dataStorage.loadData(Constants.dataStorageKey);
+  void _loadExpenseData() {
+    String savedData = DataStorage.loadData(Constants.dataStorageKey);
 
     if (savedData != null) {
+      dynamic savedDataJson = json.decode(savedData);
+
       for (dynamic expenseDateListItem
-          in savedData[Constants.expenseDateListKey]) {
+          in savedDataJson[Constants.expenseDateListKey]) {
         String savedExpenseDate = expenseDateListItem[Constants.expenseDateKey];
         ExpenseItemList savedExpenseItemList = ExpenseItemList();
         if (savedExpenseDate == DateFormat('yyyy-MM').format(DateTime.now())) {
@@ -87,7 +97,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
     expenseDateList.addExpenseDate(expenseDate);
 
-    dataStorage.saveData(
+    DataStorage.saveData(
         Constants.dataStorageKey, expenseDateList.toJson().toString());
 
     totalExpenses[expenseCategory] += expenseValue;
@@ -96,6 +106,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didInitState() async {
+    await DataStorage.init();
+
+    _loadSettingsData();
     _loadExpenseData();
   }
 
@@ -108,15 +125,25 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        centerTitle: true,
-        title: Text('Expense Tracker'),
-      ),
+      appBar: Constants.kAppbarStyle,
+      drawer: SideNavBar(),
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 5,
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'Expenses',
+                style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 7,
             child: ListView.builder(
               itemCount: expenseDateList.getExpenseDateList().length ?? 0,
               itemBuilder: (context, index) {
@@ -172,9 +199,12 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     List<DataRow> dataRows = [];
     expenseItemList.sortExpenseItems();
     for (ExpenseItem expenseItem in expenseItemList.getExpenseItemList()) {
-      dataRows.add(DataRowComponent(expenseItem.getIconData(),
-              expenseItem.getCategory(), expenseItem.getValue())
-          .create());
+      dataRows.add(DataRowComponent(
+        expenseItem.getIconData(),
+        expenseItem.getCategory(),
+        expenseItem.getValue(),
+        Settings.currency,
+      ).create());
     }
 
     tableContent.add(

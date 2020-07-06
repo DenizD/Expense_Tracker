@@ -1,4 +1,5 @@
 import 'package:expensetracker/screens/expense_screen.dart';
+import 'package:expensetracker/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,7 +10,11 @@ class ExpenseTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ExpenseScreen(),
+      initialRoute: ExpenseScreen.id,
+      routes: {
+        ExpenseScreen.id: (context) => ExpenseScreen(),
+        SettingsScreen.id: (context) => SettingsScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

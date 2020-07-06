@@ -5,7 +5,9 @@ class DataRowComponent {
   final IconData iconData;
   final String categoryTitle;
   final double expenseValue;
-  DataRowComponent(this.iconData, this.categoryTitle, this.expenseValue);
+  final String currency;
+  DataRowComponent(
+      this.iconData, this.categoryTitle, this.expenseValue, this.currency);
 
   DataRow create() {
     return DataRow(
@@ -27,7 +29,7 @@ class DataRowComponent {
         ),
         DataCell(
           Text(
-            '$expenseValue',
+            '$expenseValue $currency',
             style: TextStyle(
               color: Constants.categoryColorMap[categoryTitle],
               fontWeight: FontWeight.bold,

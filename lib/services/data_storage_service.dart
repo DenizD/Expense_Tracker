@@ -1,28 +1,25 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class DataStorage {
-  SharedPreferences prefs;
+  static SharedPreferences prefs;
 
-  Future<void> init() async {
+  static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
   }
 
-  void saveData(String key, String data) {
+  static void saveData(String key, String data) {
     prefs.setString(key, data);
   }
 
-  dynamic loadData(String key) {
+  static String loadData(String key) {
     if (prefs.containsKey(key)) {
       String data = prefs.getString(key);
-      dynamic jsonData = json.decode(data);
-
-      return jsonData;
+      return data;
     }
     return null;
   }
 
-  void deleteData(String key) {
+  static void deleteData(String key) {
     if (prefs.containsKey(key)) {
       prefs.remove(key);
     }

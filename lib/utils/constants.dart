@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:currencies/currencies.dart';
 
 class Constants {
-  static final String dataStorageKey = 'expense_tracker';
+  static final kAppbarStyle = AppBar(
+    centerTitle: true,
+    title: Text('Expense Tracker'),
+    backgroundColor: Colors.green,
+  );
+
+  static final String dataStorageKey = 'expense_tracker_data';
+  static final String currencyStorageKey = 'expense_tracker_currency_settings';
+  static final String languageStorageKey = 'expense_tracker_language_settings';
+
   static final String expenseItemKey = 'expenseItem';
   static final String expenseItemCategoryKey = 'category';
   static final String expenseItemValueKey = 'value';
@@ -41,4 +51,11 @@ class Constants {
 
   static final Map<String, Color> categoryColorMap =
       Map.fromIterables(categoryList, categoryColorList);
+
+  static final List<Currency> currencyList = currencies.values.toList();
+  static final List<String> languageList = [
+    'Turkish',
+    'English',
+    'German',
+  ];
 }
