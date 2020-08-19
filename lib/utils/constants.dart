@@ -11,6 +11,7 @@ class Constants {
   static final String dataStorageKey = 'expense_tracker_data';
   static final String currencyStorageKey = 'expense_tracker_currency_settings';
   static final String languageStorageKey = 'expense_tracker_language_settings';
+  static final String balanceStorageKey = 'expense_tracker_balance_settings';
 
   static final String expenseItemKey = 'expenseItem';
   static final String expenseItemCategoryKey = 'category';
@@ -20,6 +21,7 @@ class Constants {
   static final String expenseDateListKey = 'expenseDateList';
 
   static final List<String> categoryList = [
+    'Income',
     'Home',
     'Car',
     'Shopping',
@@ -29,15 +31,17 @@ class Constants {
   ];
 
   static final List<Color> categoryColorList = [
+    Colors.green,
     Colors.brown,
     Colors.red,
     Colors.orange,
-    Colors.green,
+    Colors.grey,
     Colors.blue,
     Colors.purple
   ];
 
   static final List<IconData> categoryIconList = [
+    Icons.attach_money,
     Icons.home,
     Icons.directions_car,
     Icons.shopping_cart,

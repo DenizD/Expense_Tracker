@@ -5,6 +5,7 @@ import 'package:expensetracker/services/data_storage_service.dart';
 import 'package:expensetracker/utils/constants.dart';
 import 'package:expensetracker/utils/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String id = "settings_screen";
@@ -16,6 +17,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final List<DropdownMenuItem> currencyItems = [];
   final List<DropdownMenuItem> languageItems = [];
+  TextEditingController textController = TextEditingController();
 
   void _addCurrencies() {
     for (Currency currency in Constants.currencyList) {
@@ -40,6 +42,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
     _addCurrencies();
     _addLanguages();
+    textController.text = '${Settings.balance} ${Settings.currency}';
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
@@ -116,6 +125,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     });
                   },
                 ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    'Balance',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: TextField(
+                    controller: textController,
+                    decoration: InputDecoration(
+                      hintText: 'Set your balance',
+                    ),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.left,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    onSubmitted: (String value) {
+                      Settings.balance = value;
+                      setState(() {
+                        textController.text =
+                            '${Settings.balance} ${Settings.currency}';
+                        DataStorage.saveData(
+                            Constants.balanceStorageKey, Settings.balance);
+                      });
+                    },
+                  ),
+                )
               ],
             ),
           ),

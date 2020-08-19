@@ -28,6 +28,7 @@ class _ExpenseScreenState extends State<ExpenseScreen>
 
   String expenseCategory;
   double expenseValue;
+  double totalBalance;
 
   Map<String, double> totalExpenses = Map.fromIterables(
       Constants.categoryList, List.filled(Constants.categoryList.length, 0));
@@ -40,6 +41,10 @@ class _ExpenseScreenState extends State<ExpenseScreen>
         DataStorage.loadData(Constants.currencyStorageKey) ?? '';
     Settings.language =
         DataStorage.loadData(Constants.languageStorageKey) ?? '';
+    Settings.balance = DataStorage.loadData(Constants.balanceStorageKey) ?? '';
+    totalBalance = (Settings.balance == '')
+        ? 0
+        : double.parse(Settings.balance.replaceAll(',', '.'));
   }
 
   void _loadExpenseData() {
@@ -84,6 +89,14 @@ class _ExpenseScreenState extends State<ExpenseScreen>
     if (expenseCategory == null || expenseValue == null) {
       return;
     }
+
+    if (expenseCategory == Constants.categoryList[0]) {
+      totalBalance += expenseValue;
+    } else {
+      totalBalance -= expenseValue;
+    }
+    Settings.balance = totalBalance.toString();
+
     ExpenseItem expenseItem = ExpenseItem(
       expenseCategory,
       expenseValue,
@@ -99,6 +112,8 @@ class _ExpenseScreenState extends State<ExpenseScreen>
 
     DataStorage.saveData(
         Constants.dataStorageKey, expenseDateList.toJson().toString());
+
+    DataStorage.saveData(Constants.balanceStorageKey, Settings.balance);
 
     totalExpenses[expenseCategory] += expenseValue;
   }
@@ -130,9 +145,9 @@ class _ExpenseScreenState extends State<ExpenseScreen>
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(5.0),
               child: Text(
                 'Expenses',
                 style: TextStyle(
@@ -143,7 +158,23 @@ class _ExpenseScreenState extends State<ExpenseScreen>
             ),
           ),
           Expanded(
-            flex: 7,
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Your Balance: ${Settings.balance} ${Settings.currency}',
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 20,
             child: ListView.builder(
               itemCount: expenseDateList.getExpenseDateList().length ?? 0,
               itemBuilder: (context, index) {
@@ -166,7 +197,7 @@ class _ExpenseScreenState extends State<ExpenseScreen>
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
