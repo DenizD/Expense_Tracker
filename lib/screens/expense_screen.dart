@@ -42,7 +42,8 @@ class _ExpenseScreenState extends State<ExpenseScreen>
     Settings.language =
         DataStorage.loadData(Constants.languageStorageKey) ?? '';
     Settings.balance = DataStorage.loadData(Constants.balanceStorageKey) ?? '';
-    totalBalance = (Settings.balance == '')
+    print(Settings.balance);
+    totalBalance = (Settings.balance == '' || Settings.balance == null)
         ? 0
         : double.parse(Settings.balance.replaceAll(',', '.'));
   }
@@ -78,9 +79,7 @@ class _ExpenseScreenState extends State<ExpenseScreen>
         ExpenseDate expenseDate = ExpenseDate(
             DateTime.parse(savedExpenseDate.toString() + '-01'),
             savedExpenseItemList);
-        setState(() {
-          expenseDateList.addExpenseDate(expenseDate);
-        });
+        expenseDateList.addExpenseDate(expenseDate);
       }
     }
   }
@@ -127,8 +126,10 @@ class _ExpenseScreenState extends State<ExpenseScreen>
   void didInitState() async {
     await DataStorage.init();
 
-    _loadSettingsData();
-    _loadExpenseData();
+    setState(() {
+      _loadSettingsData();
+      _loadExpenseData();
+    });
   }
 
   @override
@@ -164,7 +165,7 @@ class _ExpenseScreenState extends State<ExpenseScreen>
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  'Your Balance: ${Settings.balance} ${Settings.currency}',
+                  'Your Balance: $totalBalance ${Settings.currency}',
                   style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.w700,

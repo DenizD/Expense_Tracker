@@ -1,15 +1,18 @@
 # Expense Tracker in Flutter
 
-This is a simple yet useful "Expense Tracker" mobile application made using Flutter/Dart programming language.
+Mobile application to track your daily expenses. Implemented using Dart programming language and Flutter framework.
 
-You can enter your expenses in different categories ["Home", "Car", "Shopping", "Restaurant", "Leisure", "Other"] and the app will show your total expenses in each category on a monthly basis. 
+You can enter your income or expenses in different categories ["Home", "Car", "Shopping", "Restaurant", "Leisure", "Other"] and the app will show your total expenses in each category on a monthly basis. 
 
-Here is a screenshot from the app:
+Here are some screenshots from the app:
 
-<p float="left" align="center">
-  <img src="screenshots/expense_tracker_screenshot_home.jpg" alt="HomePage" width="200" />
-  <img src="screenshots/expense_tracker_screenshot_settings.jpg" alt="SettingsPage" width="200" /> 
+<p float="left" align="left">
+  <img src="screenshots/home_screen.jpg" alt="Home_Page" width="180" />
+  <img src="screenshots/add_expense_screen.jpg" alt="Add_Expense" width="180" /> 
+  <img src="screenshots/expense_distribution_screen.jpg" alt="Expense_Distribution" width="180" /> 
+  <img src="screenshots/settings_screen.jpg" alt="Settings_Screen" width="180" />
 </p>
+
 
 
 ### Required Softwares
